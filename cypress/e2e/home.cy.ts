@@ -1,4 +1,4 @@
-import { AppSettings } from "../../src/helpers/Misc/AppSettings";
+import {AppSettings} from "../../src/helpers/Misc/AppSettings";
 import HomePage from "../pageObjects/HomePage";
 
 const homePage = new HomePage();

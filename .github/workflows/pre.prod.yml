@@ -1,0 +1,69 @@
+name: NB Pipeline
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+jobs:
+  Code-Quality-Checks:
+    name: CQC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'
+      - name: Install dependencies
+        run: npm i
+      - name: Run ESLint
+        run: npm run lint
+  Unit-Tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: Code-Quality-Checks
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Run Unit Tests
+        run: npm run test:unit:ci
+        env:
+          API_HOST: ${{ secrets.API_HOST }}
+          API_KEY_1: "pub_bb7a9dd79dd345568765fbf34950c0b3"
+  E2E-Tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: Code-Quality-Checks
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Start Server and Run E2E Tests
+        env:
+          API_HOST: ${{ secrets.API_HOST }}
+          API_KEY_1: "pub_bb7a9dd79dd345568765fbf34950c0b3"
+        run: |
+          npm run dev &
+          npx wait-on http://localhost:3000 --timeout 60000
+          npm run test:e2e:ci
+      - name: Upload E2E test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: cypress/videos

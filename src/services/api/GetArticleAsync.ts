@@ -7,7 +7,7 @@ export const PrepareNewsRoute = (): string =>
 
 export async function GetArticleAsync(): Promise<INewsErrorResponse | INewsSuccessResponse> {
     try {
-        const response = await fetch("https://newsdata.io/api/1/latest?apikey=pub_495091b0946ae6d16b1eb48947bbf249c3ba&language=en&country=au,us,gb", {
+        const response = await fetch(PrepareNewsRoute(), {
             method: "GET",
             headers: {"Content-Type": "application/json"},
         });

@@ -11,7 +11,7 @@ export async function GetArticleAsync(): Promise<INewsErrorResponse | INewsSucce
             method: "GET",
             headers: {"Content-Type": "application/json"},
         });
-        //
+        
         const data = await response.json();
         const results: IArticle[] = data.results;
         const filteredResults: IArticle[] = [];

@@ -39,7 +39,7 @@ jobs:
         run: npm run test:unit:ci
         env:
           API_HOST: ${{ secrets.API_HOST }}
-          API_KEY_1: "pub_bb7a9dd79dd345568765fbf34950c0b3"
+          API_KEY_1: ${{ secrets.API_KEY_1 }}
   E2E-Tests:
     name: E2E Tests
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
       - name: Start Server and Run E2E Tests
         env:
           API_HOST: ${{ secrets.API_HOST }}
-          API_KEY_1: "pub_bb7a9dd79dd345568765fbf34950c0b3"
+          API_KEY_1: ${{ secrets.API_KEY_1 }}
         run: |
           npm run dev &
           npx wait-on http://localhost:3000 --timeout 60000

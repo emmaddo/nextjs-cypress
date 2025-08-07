@@ -1,6 +1,7 @@
 export class SiteLinks {
     public static readonly navLinks: string[] = [
         "Home",
+        "TestPage",
         "News",
         "Sport",
         "Business",
